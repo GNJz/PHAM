@@ -1,350 +1,241 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXX');
-</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PHAM</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* 추가: 전역 불릿 제거 (점 숨김) */
-    ul, li { list-style: none; margin: 0; padding: 0; }
-    *::marker { content: ""; }
-
-    /* ===== 기본 스타일 (네가 주신 틀 유지) ===== */
-    :root { --menu-width: 250px; } /* 메뉴 폭 변수 (JS가 실제 폭으로 갱신) */
-
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-        color: #000;
-        overflow-x: hidden;
-        transition: transform 0.3s ease;
-    }
-    .menu-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-        background: none;
-        border: none;
-        color: #000;
-        font-size: 2em;
-        cursor: pointer;
-        transition: left 0.3s ease;
-    }
-    .side-menu {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 250px;
-        height: 100vh;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 60px 20px 20px;
-        box-sizing: border-box;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        z-index: 2000; /* 메뉴가 항상 위로 오도록 살짝 상향 */
-        border-right: 1px solid #ccc;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    .side-menu.active {
-        transform: translateX(0);
-    }
-
-    .logo-center {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); /* 기본: 정확히 정중앙 */
-        z-index: 50;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        pointer-events: none;
-        will-change: transform;
-    }
-    .logo-center img {
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-    }
-
-    /* 메뉴가 열리면 로고를 '남은 화면의 정중앙'으로 살짝 오른쪽 이동 */
-    body.menu-open .logo-center{
-        transform: translate(calc(-50% + var(--menu-width) / 2), -50%);
-    }
-
-    #pageWrap {
-        position: relative;
-        min-height: 100vh;
-        transition: transform 0.3s ease;
-    }
-    .content {
-        display: none;
-        padding: 40px;
-        box-sizing: border-box;
-        min-height: 100vh;
-    }
-    .content.active {
-        display: block;
-    }
-    .submenu {
-      list-style: none;
-      padding-left: 15px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-in-out;
-      margin: 0;
-    }
-    .submenu.show {
-      max-height: 500px;
-    }
-    .submenu-toggle, .menu-content a {
-      color: #000;
-      text-decoration: none;
-      display: block;
-      padding: 13px 0;
-      background: none;
-      border: none;
-      text-align: left;
-      width: 100%;
-    }
-
-    /* 모바일에서 서브메뉴 잘림 방지(12번까지 보이게 여유 확보) */
-    @media (max-width: 800px){
-      .side-menu.active .submenu.show{ max-height: 9999px; }
-      .side-menu{ height: 100dvh; padding-bottom: 120px; }
-      body.menu-open{ overflow: hidden; height: 100dvh; }
-    }
-  </style>
-</head>
-<body>
-  <button class="menu-btn" id="menuBtn" aria-controls="sideMenu" aria-expanded="false" aria-label="메뉴 열기">☰</button>
-
-  <nav class="side-menu" id="sideMenu" aria-label="사이드 내비게이션">
-    <div class="menu-content" id="menuContent">
-      <a href="#home" data-section="home">Home</a>
-
-      <button class="submenu-toggle" aria-expanded="false">memo</button>
-      <ul class="submenu">
-        <li><a href="#memo_1" data-section="memo_1">1. 이과 모드</a></li>
-        <li><a href="#memo_2" data-section="memo_2">2. 문과 모드</a></li>
-        <li><a href="#memo_3" data-section="memo_3">3. 예체능 모드</a></li>
-        <li><a href="#memo_4" data-section="memo_4">4. 잡담 모드</a></li>
-      </ul>
-
-      <button class="submenu-toggle" aria-expanded="false">KAO : K-pop Art Online</button>
-      <ul class="submenu has-gap">
-        <li><a href="#KAO_2" data-section="iDea">iDea (세계관)</a></li>
-        <li><a href="#KAO_3" data-section="SaaS">SaaS (구조)</a></li>
-      </ul>
-
-      <a href="#prologue" data-section="prologue" class="spacer-top">프롤로그 prologue</a>
-      <a href="#part1" data-section="part1">파트 1 : 의식의 변화</a>
-      <a href="#mixtape" data-section="mixtape">mixtape : Runway</a>
-
-      <button class="submenu-toggle" aria-expanded="false">파트 2 : ep - Extended play</button>
-      <ul class="submenu">
-        <li><a href="#part2_memo" data-section="part2_memo">1. memo - memory</a></li>
-        <li><a href="#part2_memory" data-section="part2_memory">2. memory - melody</a></li>
-        <li><a href="#part2_rhythm" data-section="part2_rhythm">3. rhythm & flow</a></li>
-        <li><a href="#part2_mixtape2" data-section="part2_mixtape2">4. mixtape^2 : Threads</a></li>
-        <li><a href="#part2_lost" data-section="part2_lost">5. Lost</a></li>
-        <li><a href="#part2_vega" data-section="part2_vega">6. Vega</a></li>
-        <li><a href="#part2" data-section="part2">파트 2 전체</a></li>
-      </ul>
-
-      <a href="#maze" data-section="maze">DLC : 지옥의 대미궁</a>
-      <a href="#rocket" data-section="rocket">single : Rocke+ Spirit</a>
-
-      <button class="submenu-toggle" aria-expanded="false">파트 3 : warpSpace</button>
-      <ul class="submenu">
-        <li><a href="#part3_qquarts" data-section="part3_qquarts">1. Qquarts co.</a></li>
-        <li><a href="#part3_quarkka" data-section="part3_quarkka">2. Quarkka.Rivet</a></li>
-        <li><a href="#part3_cto" data-section="part3_cto">3. CTO . Qlode</a></li>
-        <li><a href="#part3_4" data-section="part3_4">4. </a></li>
-        <li><a href="#part3_5" data-section="part3_5">5. </a></li>
-        <li><a href="#part3_6" data-section="part3_6">6. </a></li>
-        <li><a href="#part3_7" data-section="part3_7">7. </a></li>
-        <li><a href="#part3_8" data-section="part3_8">8. </a></li>
-        <li><a href="#part3_9" data-section="part3_9">9. </a></li>
-        <li><a href="#part3_10" data-section="part3_10">10. </a></li>
-        <li><a href="#part3_11" data-section="part3_11">11. </a></li>
-        <li><a href="#part3_12" data-section="part3_12">12. </a></li>
-        <li><a href="#part3" data-section="part3">파트 3 전체</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="logo-center">
-     <img src="pham_logo3.JPG" alt="PHAM" />
-  </div>
-
-  <main id="pageWrap">
-    <div class="content" id="mainContent"></div>
-    <section class="content" id="home"></section>
-    <section class="content" id="memo_1">이과 메모 초기 텍스트</section>
-    <section class="content" id="memo_2">문과 메모 초기 텍스트</section>
-    <section class="content" id="memo_3">예체능 메모 초기 텍스트</section>
-    <section class="content" id="memo_4">잡담 메모 초기 텍스트</section>
-    <section class="content" id="prologue">프롤로그</section>
-    <section class="content" id="part1">파트 1 내용</section>
-    <section class="content" id="mixtape">믹스테이프</section>
-    <section class="content" id="maze">지옥의 대미궁</section>
-    <section class="content" id="rocket">로켓 스피릿</section>
-    <section class="content" id="part2_memo"><h2>1. memo - memory</h2><p>memo - memory 내용</p></section>
-    <section class="content" id="part2_memory"><h2>2. memory - melody</h2><p>memory - melody 내용</p></section>
-    <section class="content" id="part2_rhythm"><h2>3. rhythm & flow</h2><p>rhythm & flow 내용</p></section>
-    <section class="content" id="part2_mixtape2"><h2>4. mixtape^2 : Threads</h2><p>mixtape^2 : Threads 내용</p></section>
-    <section class="content" id="part2_lost"><h2>5. Lost</h2><p>Lost 내용</p></section>
-    <section class="content" id="part2_vega"><h2>6. Vega</h2><p>Vega 내용</p></section>
-    <section class="content" id="part2">
-      <h2>파트 2 : ep - Extended play</h2>
-      <div class="part2-content">
-        <h3>1. memo - memory</h3>
-        <p>memo - memory 내용</p>
+// PHAM 게시물 시스템 - 기존 구조 완전 보존
+(function() {
+    'use strict';
+    
+    let isSystemReady = false;
+    
+    // DOM 로드 완료 후 초기화
+    function initialize() {
+        if (isSystemReady) return;
         
-        <h3>2. memory - melody</h3>
-        <p>memory - melody 내용</p>
+        // 기존 showSection 함수 확장
+        const originalShowSection = window.showSection;
         
-        <h3>3. rhythm & flow</h3>
-        <p>rhythm & flow 내용</p>
-        
-        <h3>4. mixtape^2 : Threads</h3>
-        <p>mixtape^2 : Threads 내용</p>
-        
-        <h3>5. Lost</h3>
-        <p>Lost 내용</p>
-        
-        <h3>6. Vega</h3>
-        <p>Vega 내용</p>
-      </div>
-    </section>
-    <section class="content" id="KAO">KAO : K-pop Art Online </section>
-    <section class="content" id="part3_qquarts"><h2>1. Qquarts co.</h2><p>Qquarts co.</p></section>
-    <section class="content" id="part3_quarkka"><h2>2. Quarkka.Rivet</h2><p>Quarkka.Rivet</p></section>
-    <section class="content" id="part3_cto"><h2>3. CTO . Qlode</h2><p>CTO . Qlode </p></section>
-    <section class="content" id="part3_4"><h2>4. </h2><p></p></section>
-    <section class="content" id="part3_5"><h2>5. </h2><p></p></section>
-    <section class="content" id="part3_6"><h2>6. </h2><p></p></section>
-    <section class="content" id="part3_7"><h2>7. </h2><p></p></section>
-    <section class="content" id="part3_8"><h2>8. </h2><p></p></section>
-    <section class="content" id="part3_9"><h2>9. </h2><p></p></section>
-    <section class="content" id="part3_10"><h2>10. </h2><p></p></section>
-    <section class="content" id="part3_11"><h2>11. </h2><p></p></section>
-    <section class="content" id="part3_12"><h2>12. </h2><p></p></section>
-    <section class="content" id="part3">
-      <h2>파트 3 : warpSpace</h2>
-      <div class="part3-content">
-        <h3>1. Qquarts co.</h3>
-        <p>Qquarts co. 내용</p>
-        
-        <h3>2. Quarkka.Rivet</h3>
-        <p>Quarkka.Rivet 내용</p>
-        
-        <h3>3. CTO . Claude</h3>
-        <p>CTO . Claude 내용</p>
-        
-        <h3>4-12. 추가 섹션들</h3>
-        <p>추가 섹션들의 내용이 여기에 들어갑니다.</p>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const body        = document.body;
-      const sideMenu    = document.getElementById('sideMenu');
-      const menuBtn     = document.getElementById('menuBtn');
-      const menuContent = document.getElementById('menuContent');
-      const logoCenter  = document.querySelector('.logo-center');
-
-      // 모든 section에 .content 보강(중복도 OK)
-      document.querySelectorAll('section').forEach(section => {
-          section.classList.add('content');
-      });
-
-      function setMenuWidthVar(){
-        const w = sideMenu.getBoundingClientRect().width || 250;
-        document.documentElement.style.setProperty('--menu-width', w + 'px');
-      }
-
-      function updateMenuState() {
-        body.classList.toggle('menu-open', sideMenu.classList.contains('active'));
-        setMenuWidthVar();
-      }
-
-      // 햄버거 버튼 토글
-      menuBtn.addEventListener('click', () => {
-        sideMenu.classList.toggle('active');
-        menuBtn.setAttribute('aria-expanded', String(sideMenu.classList.contains('active')));
-        updateMenuState();
-      });
-
-      // 창 크기 바뀌면 메뉴 폭 변수 재계산(열려있을 때)
-      window.addEventListener('resize', () => {
-        if (sideMenu.classList.contains('active')) setMenuWidthVar();
-      });
-
-      // 서브메뉴 토글
-      document.querySelectorAll('.submenu-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const sub = btn.nextElementSibling;
-          if (sub && sub.classList.contains('submenu')) {
-            sub.classList.toggle('show');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-            btn.setAttribute('aria-expanded', String(!expanded));
-          }
-        });
-      });
-
-      // 섹션 전환
-      function showSection(id) {
-        const sections = document.querySelectorAll('.content');
-        sections.forEach(s => s.classList.remove('active'));
-
-        const el = document.getElementById(id);
-        if (el) el.classList.add('active');
-
-        // 홈만 로고 표시
-        if (id === 'home' || !id) {
-          logoCenter.style.display = 'block';
-        } else {
-          logoCenter.style.display = 'none';
+        // 기존 메뉴 클릭 이벤트에 후킹
+        const menuContent = document.getElementById('menuContent');
+        if (menuContent) {
+            menuContent.addEventListener('click', function(e) {
+                const link = e.target.closest('[data-section]');
+                if (!link) return;
+                
+                const sectionId = link.getAttribute('data-section');
+                
+                // memo 섹션들만 처리
+                if (sectionId && sectionId.startsWith('memo_')) {
+                    setTimeout(() => loadPostsForSection(sectionId), 200);
+                }
+            });
         }
-
-        sideMenu.classList.remove('active');
-        menuBtn.setAttribute('aria-expanded', 'false');
-        updateMenuState();
-      }
-
-      // 메뉴 클릭(위임)
-      menuContent.addEventListener('click', e => {
-        const link = e.target.closest('[data-section]');
-        if (!link) return;
-        e.preventDefault();
-        showSection(link.getAttribute('data-section'));
-      });
-
-      // 초기 상태
-      setMenuWidthVar();
-      const hash = decodeURIComponent(location.hash.replace('#', ''));
-      if (hash && document.getElementById(hash)) {
-        showSection(hash);
-      } else {
-        showSection('home');
-      }
-    });
-  </script>
-  <script src="js/posts.js"></script>
-</body>
-</html>
+        
+        isSystemReady = true;
+        console.log('PHAM PostSystem ready');
+    }
+    
+    async function loadPostsForSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+        
+        const memoNumber = sectionId.replace('memo_', '');
+        const jsonFile = `data/memo${memoNumber}.json`;
+        
+        try {
+            // 로딩 상태
+            section.innerHTML = createLoadingHTML();
+            
+            const response = await fetch(`./${jsonFile}`);
+            if (!response.ok) {
+                throw new Error(`파일을 찾을 수 없습니다: ${jsonFile}`);
+            }
+            
+            const posts = await response.json();
+            renderPosts(posts, section, getSectionTitle(memoNumber));
+            
+        } catch (error) {
+            console.log('게시물 로딩 실패:', error.message);
+            section.innerHTML = createEmptyStateHTML(getSectionTitle(memoNumber));
+        }
+    }
+    
+    function createLoadingHTML() {
+        return `
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 300px;">
+                <div style="text-align: center; color: #666;">
+                    <div style="font-size: 1.5em; margin-bottom: 10px;">📚</div>
+                    <div>게시물을 불러오는 중...</div>
+                </div>
+            </div>
+        `;
+    }
+    
+    function createEmptyStateHTML(title) {
+        return `
+            <div style="max-width: 800px; margin: 0 auto; padding: 40px; text-align: center;">
+                <h1 style="font-size: 2.5em; color: #333; margin-bottom: 30px;">${title}</h1>
+                <div style="background: #f8f9fa; border-radius: 12px; padding: 40px; color: #666;">
+                    <div style="font-size: 3em; margin-bottom: 20px;">✍️</div>
+                    <p style="font-size: 1.2em; line-height: 1.6;">아직 게시물이 없습니다</p>
+                    <p style="font-size: 0.9em; color: #999;">곧 흥미로운 콘텐츠가 업데이트될 예정입니다</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    function getSectionTitle(memoNumber) {
+        const titles = {
+            '1': '이과 모드',
+            '2': '문과 모드', 
+            '3': '예체능 모드',
+            '4': '잡담 모드'
+        };
+        return titles[memoNumber] || `메모 ${memoNumber}`;
+    }
+    
+    function renderPosts(posts, container, sectionTitle) {
+        if (!posts || posts.length === 0) {
+            container.innerHTML = createEmptyStateHTML(sectionTitle);
+            return;
+        }
+        
+        container.innerHTML = `
+            <div style="max-width: 900px; margin: 0 auto; padding: 20px;">
+                <header style="text-align: center; margin-bottom: 50px;">
+                    <h1 style="font-size: 3em; color: #333; margin-bottom: 10px; font-weight: 300;">
+                        ${sectionTitle}
+                    </h1>
+                    <div style="width: 60px; height: 2px; background: #007bff; margin: 0 auto;"></div>
+                </header>
+                <div id="posts-grid"></div>
+            </div>
+        `;
+        
+        const postsGrid = container.querySelector('#posts-grid');
+        
+        posts.forEach(post => {
+            const postElement = createPostCard(post);
+            postsGrid.appendChild(postElement);
+        });
+    }
+    
+    function createPostCard(post) {
+        const article = document.createElement('article');
+        article.className = 'post-card';
+        article.style.cssText = `
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        `;
+        
+        // 호버 애니메이션
+        article.addEventListener('mouseenter', () => {
+            article.style.transform = 'translateY(-5px)';
+            article.style.boxShadow = '0 12px 35px rgba(0,0,0,0.15)';
+        });
+        
+        article.addEventListener('mouseleave', () => {
+            article.style.transform = 'translateY(0)';
+            article.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+        });
+        
+        // 콘텐츠 생성
+        let contentHTML = `
+            <header style="margin-bottom: 20px;">
+                <h2 style="font-size: 1.8em; color: #2c3e50; margin: 0; line-height: 1.3; font-weight: 600;">
+                    ${post.title}
+                </h2>
+            </header>
+        `;
+        
+        // 본문 내용
+        const formattedContent = formatPostContent(post.content, post.type, post.id);
+        contentHTML += `
+            <div style="line-height: 1.8; color: #444; font-size: 1.05em; white-space: pre-wrap; margin: 25px 0;">
+                ${formattedContent}
+            </div>
+        `;
+        
+        // 이미지 처리
+        if (post.images && post.images.length > 0) {
+            contentHTML += '<div style="margin: 25px 0;">';
+            post.images.forEach(imagePath => {
+                contentHTML += `
+                    <img src="./images/${imagePath}" 
+                         alt="게시물 이미지" 
+                         style="max-width: 100%; height: auto; border-radius: 12px; 
+                                margin: 10px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"
+                         onerror="this.parentElement.removeChild(this)">
+                `;
+            });
+            contentHTML += '</div>';
+        }
+        
+        // 메타 정보
+        const typeLabel = post.type === 'long' ? '긴 글' : '짧은 글';
+        const typeColor = post.type === 'long' ? '#3498db' : '#e74c3c';
+        
+        contentHTML += `
+            <footer style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; 
+                          display: flex; justify-content: space-between; align-items: center;">
+                <time style="color: #7f8c8d; font-size: 0.9em;">
+                    📅 ${post.date}
+                </time>
+                <span style="background: ${typeColor}; color: white; padding: 6px 14px; 
+                           border-radius: 20px; font-size: 0.8em; font-weight: 500;">
+                    ${typeLabel}
+                </span>
+            </footer>
+        `;
+        
+        article.innerHTML = contentHTML;
+        return article;
+    }
+    
+    function formatPostContent(content, type, postId) {
+        if (type === 'long' && content.length > 400) {
+            const preview = content.substring(0, 400) + '...';
+            const uniqueId = `expand_${postId}_${Date.now()}`;
+            
+            return `
+                <div id="${uniqueId}_preview">${preview}</div>
+                <div id="${uniqueId}_full" style="display: none;">${content}</div>
+                <button onclick="toggleExpand('${uniqueId}')"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                               color: white; border: none; padding: 12px 24px; 
+                               border-radius: 25px; cursor: pointer; margin-top: 20px;
+                               font-size: 0.9em; font-weight: 500; transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                    더 읽기 📖
+                </button>
+            `;
+        }
+        return content;
+    }
+    
+    // 전역 함수로 더 읽기 기능 제공
+    window.toggleExpand = function(uniqueId) {
+        const preview = document.getElementById(uniqueId + '_preview');
+        const full = document.getElementById(uniqueId + '_full');
+        const button = event.target;
+        
+        if (preview && full && button) {
+            preview.style.display = 'none';
+            full.style.display = 'block';
+            button.style.display = 'none';
+        }
+    };
+    
+    // 초기화 실행
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+        initialize();
+    }
+    
+})();
