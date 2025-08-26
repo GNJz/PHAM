@@ -1,0 +1,24 @@
+.posts-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.post-card {
+    transition: all 0.3s ease;
+}
+
+.post-card:hover {
+    cursor: pointer;
+}
+
+.expand-btn:hover {
+    background: #0056b3 !important;
+}
+
+#loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
