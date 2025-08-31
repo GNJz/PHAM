@@ -3,3 +3,7 @@ desktop-tutorial/
 !backup/*.tar.gz
 .DS_Store
 backup/*
+.DS_Store
+# 원본/백업은 저장하되, 임시 미디어/빌드 산출물은 적절히 제외
+*.tmp
+*.log
