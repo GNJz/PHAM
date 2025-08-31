@@ -14,116 +14,139 @@ body {
   font-family: "Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: #fff;
   color: #222;
-  transition: transform .3s ease; /* 메뉴 토글 시 부드러운 전환 효과 */
-  line-height: 1.6; /* 기본 줄 간격 추가 */
+  transition: transform .3s ease;
+  line-height: 1.6;
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 /* ===== 햄버거 버튼 ===== */
 .menu-btn{
   position: fixed;
-  top: 16px; 
-  left: 16px;
+  top: 20px; 
+  left: 20px;
   z-index: 3000;
   border: 0;
   background: transparent;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   color: #222;
+  transition: left 0.3s ease;
 }
 
-/* ===== 사이드 메뉴 (오버레이) ===== */
+/* ===== 사이드 메뉴 (오버레이) - 기본은 닫힌 상태 ===== */
 .side-menu{
   position: fixed;
   top: 0; 
   left: 0;
-  width: 300px;                /* ← 사이드 메뉴 폭 */
+  width: 280px;                
   height: 100vh;
-  background: #ffffff;
-  box-shadow: 2px 0 8px rgba(0,0,0,.12);
-  transform: translateX(-100%);
-  transition: transform .25s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+  transform: translateX(-100%); /* 기본: 완전히 숨김 */
+  transition: transform .3s ease;
   z-index: 2000;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
+/* 활성화 상태에서만 보임 */
 .side-menu.active{ 
   transform: translateX(0); 
 }
 
 /* ===== 메뉴 콘텐츠 ===== */
 .menu-content{
-  display: grid;
-  gap: 16px;                   /* 8px → 16px로 증가 */
-  padding: 64px 16px 20px;     /* 좌우 패딩도 약간 증가 */
+  padding: 70px 20px 40px;
 }
 
 .menu-content a{
   display: block;
-  padding: 16px 20px;          /* 12px → 16px로 증가 */
-  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
   text-decoration: none;
-  color: #222;
-  background: #fff;
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,.06);
-  white-space: nowrap;         /* 항목 줄바꿈 방지 */
-  line-height: 1.4;            /* 줄 간격 명시적 설정 */
-  font-size: 15px;             /* 폰트 크기 명시적 설정 */
-}
-
-.menu-content .submenu.has-gap { 
-  margin-bottom: 16px; 
-}
-
-.menu-content a.spacer-top { 
-  margin-top: 16px; 
+  color: #333;
+  background: transparent;
+  transition: background 0.2s ease;
+  font-size: 15px;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .menu-content a:hover{ 
-  background: #f7f7f7; 
+  background: rgba(0,0,0,0.05); 
+}
+
+.menu-content a.spacer-top { 
+  margin-top: 24px; 
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 24px;
 }
 
 /* ===== 서브메뉴 ===== */
 .submenu-toggle{
   width: 100%;
   text-align: left;
-  padding: 16px 12px;          /* 12px → 16px로 증가 */
+  padding: 14px 16px;
+  margin: 8px 0;
   border: 0;
-  background: #fff;
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,.06);
-  border-radius: 10px;
+  background: transparent;
+  border-radius: 8px;
   font: inherit;
   font-weight: 500;
   cursor: pointer;
-  color: #222;
+  color: #333;
   white-space: nowrap;
-  line-height: 1.4;            /* 줄 간격 명시적 설정 */
-  font-size: 15px;             /* 폰트 크기 명시적 설정 */
+  line-height: 1.4;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.submenu-toggle:hover{
+  background: rgba(0,0,0,0.05);
 }
 
 /* 펼쳐진 대메뉴 버튼 글씨 두껍게 */
-button.submenu-toggle[aria-expanded="true"]{
-  font-weight: 600 !important;
+.submenu-toggle[aria-expanded="true"]{
+  font-weight: 600;
+  background: rgba(0,0,0,0.08);
 }
 
 .submenu{
   max-height: 0;
   overflow: hidden;
-  transition: max-height .25s ease;
+  transition: max-height .3s ease;
   margin: 0;
-  padding: 8px 0 0 12px;       /* 상단 패딩 추가 */
+  padding: 0;
   list-style: none;
 }
 
 .submenu.show{ 
-  max-height: 600px;           /* 500px → 600px로 증가 */
+  max-height: 800px;
 }
 
 /* 서브메뉴 항목들 */
+.submenu li {
+  margin: 0;
+  padding: 0;
+}
+
 .submenu a{ 
-  font-size: 14px;             /* 서브메뉴는 약간 작게 */
-  padding: 14px 20px;          /* 패딩 증가 */
-  margin-bottom: 4px;          /* 항목 간 간격 추가 */
+  font-size: 14px;
+  padding: 12px 32px;
+  margin: 4px 0;
+  color: #555;
   line-height: 1.4;
+}
+
+.submenu a:hover{
+  background: rgba(0,0,0,0.05);
+  color: #333;
+}
+
+.submenu.has-gap {
+  margin-bottom: 16px;
 }
 
 /* ===== 섹션 표시/정렬 ===== */
@@ -135,81 +158,41 @@ button.submenu-toggle[aria-expanded="true"]{
 }
 
 .content.active{
-  display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  justify-content: flex-start;
-  align-items: center;
-  padding-top: 120px;
-  text-align: center;
-}
-
-/* 내부 컨테이너 */
-.page{
-  max-width: 900px;
-  width: 100%;
-  padding: 0 24px;
+  display: block;
 }
 
 /* ===== 대문 로고(화면 중앙 고정) ===== */
 :root{ 
-  --menu-width: 300px; 
+  --menu-width: 280px; 
 }
 
 .logo-center{
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);      /* 데스크톱은 항상 중앙 고정 */
-  transition: transform .35s ease;      /* 부드러운 이동 */
-  z-index: 1000;
+  transform: translate(-50%,-50%);
+  transition: transform .3s ease, opacity 0.3s ease;
+  z-index: 50;
   pointer-events: none;
   will-change: transform;
 }
 
-/* 로고 크기(데스크톱 기본) */
+/* 로고 크기 */
 .logo-center img{
-  width: 600px !important;
-  max-width: none !important;
-  height: auto !important;
-  transition: transform .35s ease;      /* 축소 애니메이션 */
+  width: 100%;
+  max-width: 500px;
+  height: auto;
 }
 
-/* ===== 모바일 전용 변경만 적용 ===== */
+/* 메뉴가 열리면 로고를 남은 화면 중앙으로 이동 */
+body.menu-open .logo-center{
+  transform: translate(calc(-50% + var(--menu-width) / 2), -50%);
+}
+
+/* ===== 모바일 대응 ===== */
 @media (max-width: 800px){
-  /* 모바일 기본 로고 크기(항상 더 작게) */
-  .logo-center img{
-    width: 95vw !important;           /* 60~75vw로 조절 가능 */
-    max-width: none !important;
-    height: auto !important;
-  }
-
-  /* 메뉴 열리면: 남은 콘텐츠 영역의 중앙으로 이동 + 살짝 축소 */
-  body.menu-open .logo-center{
-    transform: translate(calc(-50% + var(--menu-width) / 2), -50%);
-  }
-  
-  body.menu-open .logo-center img{
-    transform: scale(0.85);           /* 0.75~0.9 사이 취향대로 */
-  }
-
-  /* 서브메뉴가 모바일에서 12번까지 안 잘리도록 여유 */
-  .submenu.show{ 
-    max-height: 800px; 
-  }
-  
-  /* 모바일에서 메뉴 콘텐츠 패딩 조정 */
-  .menu-content{
-    gap: 12px;                 /* 모바일에서는 간격 약간 줄임 */
-    padding: 64px 12px 40px;   /* 하단 패딩 증가 */
-  }
-  
-  /* 모바일에서 메뉴 항목 패딩 조정 */
-  .menu-content a, .submenu-toggle{
-    padding: 14px 16px;        /* 모바일에서 터치하기 쉽게 */
-  }
-  
-  /* 스크롤 영역 확보 */
   .side-menu{ 
+    width: 260px;
     height: 100dvh; 
     padding-bottom: 60px; 
   }
@@ -217,5 +200,32 @@ button.submenu-toggle[aria-expanded="true"]{
   body.menu-open{ 
     overflow: hidden; 
     height: 100dvh; 
+  }
+  
+  .menu-content{
+    padding: 70px 16px 60px;
+  }
+  
+  .menu-content a, .submenu-toggle{
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+  
+  .submenu a{
+    padding: 14px 36px;
+    font-size: 15px;
+  }
+  
+  .submenu.show{ 
+    max-height: 1000px; 
+  }
+  
+  .logo-center img{
+    width: 80vw;
+    max-width: 400px;
+  }
+  
+  body.menu-open .logo-center{
+    transform: translate(calc(-50% + 130px), -50%) scale(0.8);
   }
 }
