@@ -323,19 +323,27 @@
         });
       });
 
-      // 섹션 전환 (핵심 수정)
+      // 섹션 전환 (완전 수정)
       function showSection(id) {
         const sections = document.querySelectorAll('.content');
-        sections.forEach(s => s.classList.remove('active'));
+        
+        // 모든 섹션 완전히 숨김
+        sections.forEach(s => {
+          s.classList.remove('active');
+          s.style.display = 'none';
+        });
 
-        const el = document.getElementById(id);
-        if (el) el.classList.add('active');
-
-        // 홈에서만 로고 표시, 다른 섹션에서는 숨김
+        // 홈이면 로고만, 다른 섹션이면 해당 섹션만 표시
         if (id === 'home' || !id) {
           logoCenter.style.display = 'block';
+          // 홈에서는 아무 섹션도 표시하지 않음
         } else {
           logoCenter.style.display = 'none';
+          const el = document.getElementById(id);
+          if (el) {
+            el.classList.add('active');
+            el.style.display = 'block';
+          }
         }
 
         // 메뉴 닫기
