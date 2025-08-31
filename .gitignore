@@ -1,2 +1,5 @@
 desktop=tutorial/
 desktop-tutorial/
+!backup/*.tar.gz
+.DS_Store
+backup/*
