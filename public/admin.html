@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Upload</title>
+  <style>
+    body{ font-family: Arial, sans-serif; padding:20px; }
+    textarea, input{ width:100%; max-width:720px; }
+    textarea{ height: 200px; }
+    button{ margin-top:10px; padding:10px 14px; }
+    .result{ margin-top:16px; white-space:pre-wrap; }
+  </style>
+  </head>
+<body>
+  <h1>게시글 업로드</h1>
+  <textarea id="body" placeholder="글 붙여넣기"></textarea><br>
+  <input type="text" id="title" placeholder="제목(선택)"><br>
+  <input type="password" id="secret" placeholder="관리자 비밀키"><br>
+  <button id="upload">업로드</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    document.getElementById('upload').onclick = async () => {
+      const body = (document.getElementById('body') as HTMLTextAreaElement).value;
+      const title = (document.getElementById('title') as HTMLInputElement).value;
+      const secret = (document.getElementById('secret') as HTMLInputElement).value;
+      const result = document.getElementById('result');
+      result!.textContent = '업로드 중...';
+      try{
+        const res = await fetch('/api/post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-secret': secret
+          },
+          body: JSON.stringify({ body, title })
+        });
+        const text = await res.text();
+        result!.textContent = text;
+      }catch(err){
+        result!.textContent = String(err);
+      }
+    };
+  </script>
+</body>
+</html>
+
+
