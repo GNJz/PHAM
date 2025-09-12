@@ -288,8 +288,13 @@
       // 햄버거 버튼 토글
       menuBtn.addEventListener('click', () => {
         sideMenu.classList.toggle('active');
-        menuBtn.setAttribute('aria-expanded', String(sideMenu.classList.contains('active')));
-        sideMenu.style.display = sideMenu.classList.contains('active') ? 'block' : 'none';
+        const isOpen = sideMenu.classList.contains('active');
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+        sideMenu.style.display = isOpen ? 'block' : 'none';
+        // 사이드바 열릴 때 모든 서브메뉴 펼치기, 닫힐 때 접기
+        document.querySelectorAll('.submenu').forEach(ul => {
+          ul.classList.toggle('show', isOpen);
+        });
         updateMenuState();
       });
 
