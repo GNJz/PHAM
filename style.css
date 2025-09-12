@@ -229,3 +229,8 @@ body.menu-open .logo-center{
     transform: translate(calc(-50% + 130px), -50%) scale(0.8);
   }
 }
+
+/* chat feed styles */
+.chat-card{max-width:820px;margin:0 auto 24px;line-height:1.7}
+.chat-card .meta{color:#666;font-size:.9rem;margin:6px 0 10px}
+#chatAdmin textarea{font:16px/1.6 system-ui,apple-system,sans-serif}
