@@ -113,7 +113,7 @@
     .submenu.show {
       max-height: 9999px; /* 12개 이상도 충분히 보이도록 확대 */
     }
-    .submenu-toggle, .menu-content a {
+    .submenu-toggle, .menu-content a, .menu-content button.menu-link {
       color: #000;
       text-decoration: none;
       display: block;
@@ -135,6 +135,15 @@
       -webkit-tap-highlight-color: transparent;
     }
     .submenu-toggle::-webkit-focus-inner{ border:0; padding:0; }
+    .menu-content button.menu-link{
+      -webkit-appearance: none !important;
+      appearance: none;
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
     .submenu-toggle:hover,
     .submenu-toggle:focus,
     .submenu-toggle:focus-visible,
@@ -149,6 +158,17 @@
     .menu-content a:focus,
     .menu-content a:focus-visible,
     .menu-content a:active {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      outline: none;
+      box-shadow: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .menu-content button.menu-link:hover,
+    .menu-content button.menu-link:focus,
+    .menu-content button.menu-link:focus-visible,
+    .menu-content button.menu-link:active{
       background: transparent !important;
       background-color: transparent !important;
       background-image: none !important;
@@ -385,6 +405,16 @@
         if (!link) return;
         e.preventDefault();
         showSection(link.getAttribute('data-section'));
+      });
+
+      // 상태바 URL 노출 방지: 메뉴 내 a를 버튼으로 대체
+      Array.from(menuContent.querySelectorAll('a[data-section]')).forEach(a => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'menu-link';
+        btn.setAttribute('data-section', a.getAttribute('data-section') || '');
+        btn.innerHTML = a.innerHTML;
+        a.replaceWith(btn);
       });
 
       // 대문(홈)에서 로고 클릭 시 메뉴 열기
