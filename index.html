@@ -18,7 +18,7 @@
   <style>
     /* 추가: 전역 불릿 제거 (점 숨김) */
     ul, li { list-style: none; margin: 0; padding: 0; }
-    *::marker { content: ""; }
+    *::mark{ content: ""; }
 
     /* ===== 기본 스타일 (네가 주신 틀 유지) ===== */
     :root { --menu-width: 250px; } /* 메뉴 폭 변수 (JS가 실제 폭으로 갱신) */
@@ -255,7 +255,10 @@
     <section class="content" id="memo_1">이과 메모 초기 텍스트</section>
     <section class="content" id="memo_2">문과 메모 초기 텍스트</section>
     <section class="content" id="memo_3">예체능 메모 초기 텍스트</section>
-    <section class="content" id="memo_4">잡담 메모 초기 텍스트</section>
+    <section class="content" id="memo_4">
+      <h2>잡담 모드</h2>
+      <div id="chatFeed">불러오는 중...</div>
+    </section>
     <section class="content" id="prologue">프롤로그</section>
     <section class="content" id="part1">파트 1 내용</section>
     <section class="content" id="mixtape">믹스테이프</section>
@@ -457,5 +460,6 @@
     });
   </script>
   <script src="js/posts.js"></script>
+  <script src="js/chat.js"></script>
 </body>
 </html>
