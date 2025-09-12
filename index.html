@@ -115,7 +115,7 @@
       text-decoration: none;
       display: block;
       padding: 13px 0;
-      background: none;
+      background: transparent;
       border: none;
       text-align: left;
       width: 100%;
@@ -130,13 +130,23 @@
       box-shadow: none;
       -webkit-tap-highlight-color: transparent;
     }
+    .submenu-toggle:hover,
     .submenu-toggle:focus,
+    .submenu-toggle:focus-visible,
     .submenu-toggle:active {
-      background-color: transparent;
+      background: transparent !important;
+      background-color: transparent !important;
+      outline: none;
+      box-shadow: none;
     }
+    .menu-content a:hover,
     .menu-content a:focus,
+    .menu-content a:focus-visible,
     .menu-content a:active {
-      background-color: transparent;
+      background: transparent !important;
+      background-color: transparent !important;
+      outline: none;
+      box-shadow: none;
       -webkit-tap-highlight-color: transparent;
     }
 
