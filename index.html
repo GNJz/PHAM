@@ -132,7 +132,7 @@
 <body>
   <button class="menu-btn" id="menuBtn" aria-controls="sideMenu" aria-expanded="false" aria-label="메뉴 열기">☰</button>
 
-  <nav class="side-menu" id="sideMenu" aria-label="사이드 내비게이션">
+  <nav class="side-menu" id="sideMenu" aria-label="사이드 내비게이션" style="display:none;">
     <div class="menu-content" id="menuContent">
       <a href="#home" data-section="home">Home</a>
 
@@ -288,6 +288,7 @@
       menuBtn.addEventListener('click', () => {
         sideMenu.classList.toggle('active');
         menuBtn.setAttribute('aria-expanded', String(sideMenu.classList.contains('active')));
+        sideMenu.style.display = sideMenu.classList.contains('active') ? 'block' : 'none';
         updateMenuState();
       });
 
@@ -325,6 +326,7 @@
 
         sideMenu.classList.remove('active');
         menuBtn.setAttribute('aria-expanded', 'false');
+        sideMenu.style.display = 'none';
         updateMenuState();
       }
 
