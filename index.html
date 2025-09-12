@@ -59,7 +59,10 @@
         border-right: 1px solid #ccc;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        /* 스크롤바 UI 감추기 */
+        scrollbar-width: none; /* Firefox */
     }
+    .side-menu::-webkit-scrollbar{ width: 0; height: 0; }
     .side-menu.active {
         transform: translateX(0);
     }
@@ -150,11 +153,13 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* 메뉴 오픈 시 전체 페이지 스크롤 잠금 */
+    body.menu-open{ overflow: hidden; height: 100dvh; }
+
     /* 모바일에서 서브메뉴 잘림 방지(12번까지 보이게 여유 확보) */
     @media (max-width: 800px){
       .side-menu.active .submenu.show{ max-height: 9999px; }
       .side-menu{ height: 100dvh; padding-bottom: 120px; }
-      body.menu-open{ overflow: hidden; height: 100dvh; }
     }
   </style>
 </head>
