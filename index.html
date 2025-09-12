@@ -291,9 +291,9 @@
         const isOpen = sideMenu.classList.contains('active');
         menuBtn.setAttribute('aria-expanded', String(isOpen));
         sideMenu.style.display = isOpen ? 'block' : 'none';
-        // 사이드바 열릴 때 모든 서브메뉴 펼치기, 닫힐 때 접기
+        // 열릴 때는 서브메뉴를 기본 접힘 상태로 유지
         document.querySelectorAll('.submenu').forEach(ul => {
-          ul.classList.toggle('show', isOpen);
+          ul.classList.remove('show');
         });
         updateMenuState();
       });
