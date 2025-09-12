@@ -268,6 +268,7 @@
       const menuBtn     = document.getElementById('menuBtn');
       const menuContent = document.getElementById('menuContent');
       const logoCenter  = document.querySelector('.logo-center');
+      const pageWrap    = document.getElementById('pageWrap');
 
       // 모든 section에 .content 보강(중복도 OK)
       document.querySelectorAll('section').forEach(section => {
@@ -320,8 +321,12 @@
         // 홈만 로고 표시
         if (id === 'home' || !id) {
           logoCenter.style.display = 'block';
+          menuBtn.style.display = 'none';
+          if (pageWrap) pageWrap.style.display = 'none';
         } else {
           logoCenter.style.display = 'none';
+          menuBtn.style.display = 'block';
+          if (pageWrap) pageWrap.style.display = '';
         }
 
         sideMenu.classList.remove('active');
@@ -336,6 +341,17 @@
         if (!link) return;
         e.preventDefault();
         showSection(link.getAttribute('data-section'));
+      });
+
+      // 대문(홈)에서 로고 클릭 시 메뉴 열기
+      logoCenter.addEventListener('click', () => {
+        const onHome = document.getElementById('home')?.classList.contains('active');
+        if (!onHome) return;
+        sideMenu.classList.add('active');
+        sideMenu.style.display = 'block';
+        menuBtn.style.display = 'block';
+        menuBtn.setAttribute('aria-expanded', 'true');
+        updateMenuState();
       });
 
       // 초기 상태
